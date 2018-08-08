@@ -34,7 +34,7 @@ services:
     environment:
       - 'MONGO_LOG_DIR=/dev/null'
     volumes:
-      - sparkcc-wiki-data:/data/db
+      - sparkcc-wiki-db-data:/data/db
   sparkcc-wiki:
     image: 'requarks/wiki:latest'
     container_name: sparkcc-wiki
@@ -51,6 +51,8 @@ services:
       - LETSENCRYPT_HOST=wiki.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
     volumes:
+      - sparkcc-wiki-data:/data
+      - sparkcc-wiki-repo:/repo
       - sparkcc-wiki-config:/var/wiki/config.yml
 volumes:
   proxy-certs:
@@ -73,3 +75,11 @@ volumes:
     driver: local-persist
     driver_opts:
       mountpoint: /data/sparkcc-wiki/data
+  sparkcc-wiki-repo:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /data/sparkcc-wiki/repo
+  sparkcc-wiki-db-data:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /data/sparkcc-wiki-db/data
