@@ -51,7 +51,7 @@ services:
       - LETSENCRYPT_HOST=wiki.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
     volumes:
-      - ./config.yml:/var/wiki/config.yml
+      - sparkcc-wiki-config:/var/wiki/config.yml
 volumes:
   proxy-certs:
     driver: local-persist
