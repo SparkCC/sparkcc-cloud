@@ -53,7 +53,7 @@ services:
     volumes:
       - sparkcc-wiki-data:/data
       - sparkcc-wiki-repo:/repo
-      - sparkcc-wiki-config:/var/wiki/config.yml
+      - /data/sparkcc-wiki/config/config.yml:/var/wiki/config.yml
 volumes:
   proxy-certs:
     driver: local-persist
@@ -67,10 +67,6 @@ volumes:
     driver: local-persist
     driver_opts:
       mountpoint: /data/www-proxy/html
-  sparkcc-wiki-config:
-    driver: local-persist
-    driver_opts:
-      mountpoint: /data/sparkcc-wiki/config/config.yml
   sparkcc-wiki-data:
     driver: local-persist
     driver_opts:
