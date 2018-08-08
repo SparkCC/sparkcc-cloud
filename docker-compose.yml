@@ -1,33 +1,75 @@
-version: '2'
+version: '3'
 
 services:
-  nginx-proxy:
+  web-proxy:
     image: jwilder/nginx-proxy
     container_name: web-proxy
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-  sparkcc-wiki:
-    image: nyarla/realms-wiki-alpine
-    container_name: sparkcc-wiki 
+      - proxy-certs:/etc/nginx/certs:ro
+      - proxy-vhosts:/etc/nginx/vhost.d
+      - proxy-html:/usr/share/nginx/html
+  web-proxy-letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: web-proxy-letsencrypt
     restart: unless-stopped
-    ports:
-      - "8080:8080"
     environment:
-      REALMS_WIKI_CONFIG: >- 
-        {
-        "SITE_TITLE": "SparkCC Wiki",
-        "DB_URI": "sqlite:////opt/data/wiki.db",
-        "WIKI_PATH": "/opt/data/wiki"
-        }
-      VIRTUAL_HOST: "wiki.sparkcc.org"
+      - NGINX_PROXY_CONTAINER=web-proxy
     volumes:
-      - wiki_data:/opt/data
-
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - proxy-certs:/etc/nginx/certs:rw
+      - proxy-vhosts:/etc/nginx/vhost.d
+      - proxy-html:/usr/share/nginx/html
+  sparkcc-wiki-db:
+    image: mongo
+    container_name: sparkcc-wiki-db
+    restart: unless-stopped
+    expose:
+      - '27017'
+    command: '--smallfiles --bind_ip sparkcc-wiki-db'
+    environment:
+      - 'MONGO_LOG_DIR=/dev/null'
+    volumes:
+      - sparkcc-wiki-data:/data/db
+  sparkcc-wiki:
+    image: 'requarks/wiki:latest'
+    container_name: sparkcc-wiki
+    restart: unless-stopped
+    links:
+      - sparkcc-wiki-db
+    depends_on:
+      - sparkcc-wiki-db
+    ports:
+      - '8001:3000'
+    environment:
+      - WIKI_ADMIN_EMAIL=admin@sparkcc.org
+      - VIRTUAL_HOST=wiki.sparkcc.org
+      - LETSENCRYPT_HOST=wiki.sparkcc.org
+      - LETSENCRYPT_EMAIL=admin@sparkcc.org
+    volumes:
+      - ./config.yml:/var/wiki/config.yml
 volumes:
-  wiki_data:
+  proxy-certs:
     driver: local-persist
     driver_opts:
-      mountpoint: /var/data/wiki/
+      mountpoint: /data/www-proxy/certs
+  proxy-vhosts:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /data/www-proxy/vhosts
+  proxy-html:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /data/www-proxy/html
+  sparkcc-wiki-config:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /data/sparkcc-wiki/config/config.yml
+  sparkcc-wiki-data:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /data/sparkcc-wiki/data
