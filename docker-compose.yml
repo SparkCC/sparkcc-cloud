@@ -6,8 +6,8 @@ services:
     container_name: web-proxy
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - proxy-certs:/etc/nginx/certs:ro
@@ -28,9 +28,9 @@ services:
     image: mongo
     container_name: sparkcc-wiki-db
     restart: unless-stopped
-    expose:
-      - '27017'
-    command: '--smallfiles --bind_ip sparkcc-wiki-db'
+    ports:
+      - '27017:27017'
+    command: '--smallfiles --logpath=/dev/null'
     environment:
       - 'MONGO_LOG_DIR=/dev/null'
     volumes:
