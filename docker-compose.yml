@@ -54,6 +54,17 @@ services:
       - sparkcc-wiki-data:/data
       - sparkcc-wiki-repo:/repo
       - /data/sparkcc-wiki/config/config.yml:/var/wiki/config.yml
+  sparkcc-hq-db:
+    image: mariadb
+    container_name: sparkcc-hq-db
+    restart: unless-stopped
+    volumes:
+      - sparkcc-hq-db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${HQ_MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${HQ_MYSQL_SPARKCC_PASSWORD}
+      - MYSQL_DATABASE=sparkcc
+      - MYSQL_USER=sparkcc
   sparkcc-hq:
     image: php:7.2-apache
     container_name: sparkcc-hq
@@ -69,17 +80,6 @@ services:
       - VIRTUAL_HOST=wiki.sparkcc.org
       - LETSENCRYPT_HOST=wiki.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
-  sparkcc-hq-db:
-    image: mariadb
-    container_name: sparkcc-hq-db
-    restart: unless-stopped
-    volumes:
-      - sparkcc-hq-db:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=${HQ_MYSQL_ROOT_PASSWORD}
-      - MYSQL_PASSWORD=${HQ_MYSQL_SPARKCC_PASSWORD}
-      - MYSQL_DATABASE=sparkcc
-      - MYSQL_USER=sparkcc
 
 volumes:
   proxy-certs:
