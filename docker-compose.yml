@@ -77,8 +77,8 @@ services:
       - '8002:80'
     environment:
       - WIKI_ADMIN_EMAIL=admin@sparkcc.org
-      - VIRTUAL_HOST=wiki.sparkcc.org
-      - LETSENCRYPT_HOST=wiki.sparkcc.org
+      - VIRTUAL_HOST=hq.sparkcc.org
+      - LETSENCRYPT_HOST=hq.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
 
 volumes:
