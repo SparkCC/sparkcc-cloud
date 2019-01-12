@@ -66,7 +66,11 @@ services:
       - MYSQL_DATABASE=sparkcc
       - MYSQL_USER=sparkcc
   sparkcc-hq:
-    image: php:7.2-apache
+    build:
+      context: ./hq
+      args:
+        - HQ_GITHUB_USER=${HQ_GITHUB_USER}
+        - HQ_GITHUB_PASSWORD=${HQ_GITHUB_PASSWORD}
     container_name: sparkcc-hq
     restart: unless-stopped
     links:
@@ -76,7 +80,6 @@ services:
     ports:
       - '8002:80'
     environment:
-      - WIKI_ADMIN_EMAIL=admin@sparkcc.org
       - VIRTUAL_HOST=hq.sparkcc.org
       - LETSENCRYPT_HOST=hq.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
