@@ -1,5 +1,9 @@
 FROM php:7.2-apache
 
+RUN apk add --update \
+    git \
+  && rm -rf /var/cache/apk/*
+
 ARG HQ_GITHUB_USER
 ARG HQ_GITHUB_PASSWORD
 
