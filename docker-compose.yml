@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 services:
   web-proxy:
@@ -24,6 +24,13 @@ services:
       - proxy-certs:/etc/nginx/certs:rw
       - proxy-vhosts:/etc/nginx/vhost.d
       - proxy-html:/usr/share/nginx/html
+  watchtower:
+    image: v2tec/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    command: --interval 30 --label-enable
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   sparkcc-wiki-db:
     image: mongo
     container_name: sparkcc-wiki-db
@@ -82,6 +89,16 @@ services:
     environment:
       - VIRTUAL_HOST=hq.sparkcc.org
       - LETSENCRYPT_HOST=hq.sparkcc.org
+      - LETSENCRYPT_EMAIL=admin@sparkcc.org
+  sparkcc-www:
+    image: amorphic/sparkcc-web:latest
+    container_name: sparkcc-www
+    restart: unless-stopped
+    ports:
+      - "8003:80"
+    environment:
+      - VIRTUAL_HOST=test.sparkcc.org
+      - LETSENCRYPT_HOST=test.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
 
 volumes:
