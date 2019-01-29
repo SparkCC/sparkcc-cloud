@@ -5,6 +5,8 @@ RUN \
   apt-get install -y git && \
   apt-get clean
 
+RUN docker-php-ext-install mysqli
+
 ARG HQ_GITHUB_USER
 ARG HQ_GITHUB_PASSWORD
 
