@@ -86,7 +86,7 @@ services:
       - MYSQL_PASSWORD=${HQ_MYSQL_SPARKCC_PASSWORD}
       - MYSQL_DATABASE=sparkcc
       - MYSQL_USER=sparkcc
-      - MYSQL_HOST=sparkcc-wiki-db
+      - MYSQL_HOST=sparkcc-hq-db
       - VIRTUAL_HOST=hq.sparkcc.org
       - LETSENCRYPT_HOST=hq.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
