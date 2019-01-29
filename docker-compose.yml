@@ -73,11 +73,7 @@ services:
       - MYSQL_DATABASE=sparkcc
       - MYSQL_USER=sparkcc
   sparkcc-hq:
-    build:
-      context: ./hq
-      args:
-        - HQ_GITHUB_USER=${HQ_GITHUB_USER}
-        - HQ_GITHUB_PASSWORD=${HQ_GITHUB_PASSWORD}
+    image: amorphic/sparkcc-hq:latest
     container_name: sparkcc-hq
     restart: unless-stopped
     links:
@@ -87,6 +83,10 @@ services:
     ports:
       - '8002:80'
     environment:
+      - MYSQL_PASSWORD=${HQ_MYSQL_SPARKCC_PASSWORD}
+      - MYSQL_DATABASE=sparkcc
+      - MYSQL_USER=sparkcc
+      - MYSQL_HOST=sparkcc-wiki-db
       - VIRTUAL_HOST=hq.sparkcc.org
       - LETSENCRYPT_HOST=hq.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
