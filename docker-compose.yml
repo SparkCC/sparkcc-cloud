@@ -62,7 +62,7 @@ services:
       - sparkcc-wiki-repo:/repo
       - /data/sparkcc-wiki/config/config.yml:/var/wiki/config.yml
   sparkcc-hq-db:
-    image: mariadb
+    image: mysql:8
     container_name: sparkcc-hq-db
     restart: unless-stopped
     volumes:
