@@ -73,6 +73,19 @@ services:
       - MYSQL_PASSWORD=${HQ_MYSQL_SPARKCC_PASSWORD}
       - MYSQL_DATABASE=sparkcc
       - MYSQL_USER=sparkcc
+  sparkcc-hq-db-admin:
+    image: phpmyadmin/phpmyadmin
+    container_name: sparkcc-hq-db-admin
+    restart: unless-stopped
+    links:
+      - sparkcc-hq-db:db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${HQ_MYSQL_ROOT_PASSWORD}
+      - VIRTUAL_HOST=hqdb.sparkcc.org
+      - LETSENCRYPT_HOST=hqdb.sparkcc.org
+      - LETSENCRYPT_EMAIL=admin@sparkcc.org
+    ports:
+      - '8004:80'
   sparkcc-hq:
     image: amorphic/sparkcc-hq:latest
     container_name: sparkcc-hq
