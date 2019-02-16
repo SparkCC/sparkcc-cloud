@@ -90,6 +90,8 @@ services:
     image: amorphic/sparkcc-hq:latest
     container_name: sparkcc-hq
     restart: unless-stopped
+    volumes:
+      - sparkcc-hq-uploads:/uploads
     links:
       - sparkcc-hq-db
     depends_on:
@@ -145,3 +147,7 @@ volumes:
     driver: local-persist
     driver_opts:
       mountpoint: /data/sparkcc-hq-db/data
+  sparkcc-hq-uploads:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /data/sparkcc-hq/uploads
