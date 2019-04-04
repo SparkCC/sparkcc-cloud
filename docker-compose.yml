@@ -114,8 +114,8 @@ services:
     ports:
       - "8003:80"
     environment:
-      - VIRTUAL_HOST=test.sparkcc.org
-      - LETSENCRYPT_HOST=test.sparkcc.org
+      - VIRTUAL_HOST=www.sparkcc.org
+      - LETSENCRYPT_HOST=www.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
 
 volumes:
