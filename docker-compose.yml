@@ -32,36 +32,36 @@ services:
     command: --interval 30 --label-enable
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  sparkcc-wiki-db:
-    image: mongo
-    container_name: sparkcc-wiki-db
-    restart: unless-stopped
-    ports:
-      - '27017:27017'
-    command: '--smallfiles --logpath=/dev/null'
-    environment:
-      - 'MONGO_LOG_DIR=/dev/null'
-    volumes:
-      - sparkcc-wiki-db-data:/data/db
-  sparkcc-wiki:
-    image: 'requarks/wiki:latest'
-    container_name: sparkcc-wiki
-    restart: unless-stopped
-    links:
-      - sparkcc-wiki-db
-    depends_on:
-      - sparkcc-wiki-db
-    ports:
-      - '8001:3000'
-    environment:
-      - WIKI_ADMIN_EMAIL=admin@sparkcc.org
-      - VIRTUAL_HOST=wiki.sparkcc.org
-      - LETSENCRYPT_HOST=wiki.sparkcc.org
-      - LETSENCRYPT_EMAIL=admin@sparkcc.org
-    volumes:
-      - sparkcc-wiki-data:/data
-      - sparkcc-wiki-repo:/repo
-      - /data/sparkcc-wiki/config/config.yml:/var/wiki/config.yml
+#  sparkcc-wiki-db:
+#    image: mongo
+#    container_name: sparkcc-wiki-db
+#    restart: unless-stopped
+#    ports:
+#      - '27017:27017'
+#    command: '--smallfiles --logpath=/dev/null'
+#    environment:
+#      - 'MONGO_LOG_DIR=/dev/null'
+#    volumes:
+#      - sparkcc-wiki-db-data:/data/db
+#  sparkcc-wiki:
+#    image: 'requarks/wiki:latest'
+#    container_name: sparkcc-wiki
+#    restart: unless-stopped
+#    links:
+#      - sparkcc-wiki-db
+#    depends_on:
+#      - sparkcc-wiki-db
+#    ports:
+#      - '8001:3000'
+#    environment:
+#      - WIKI_ADMIN_EMAIL=admin@sparkcc.org
+#      - VIRTUAL_HOST=wiki.sparkcc.org
+#      - LETSENCRYPT_HOST=wiki.sparkcc.org
+#      - LETSENCRYPT_EMAIL=admin@sparkcc.org
+#    volumes:
+#      - sparkcc-wiki-data:/data
+#      - sparkcc-wiki-repo:/repo
+#      - /data/sparkcc-wiki/config/config.yml:/var/wiki/config.yml
   sparkcc-www:
     image: amorphic/sparkcc-web:latest
     container_name: sparkcc-www
