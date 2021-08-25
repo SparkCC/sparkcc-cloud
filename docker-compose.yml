@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
   web-proxy:
@@ -13,17 +13,18 @@ services:
       - proxy-certs:/etc/nginx/certs:ro
       - proxy-vhosts:/etc/nginx/vhost.d
       - proxy-html:/usr/share/nginx/html
-  web-proxy-letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: web-proxy-letsencrypt
+      - proxy-dhparam:/etc/nginx/dhparam
+      - proxy-conf:/etc/nginx/conf.d
+  web-proxy-acme:
+    image: nginxproxy/acme-companion
+    container_name: web-proxy-acme
     restart: unless-stopped
-    environment:
-      - NGINX_PROXY_CONTAINER=web-proxy
+    volumes_from:
+      - web-proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - proxy-certs:/etc/nginx/certs:rw
-      - proxy-vhosts:/etc/nginx/vhost.d
-      - proxy-html:/usr/share/nginx/html
+      - acme:/etc/acme.sh
   watchtower:
     image: v2tec/watchtower
     container_name: watchtower
@@ -74,26 +75,10 @@ services:
 
 volumes:
   proxy-certs:
-    driver: local-persist
-    driver_opts:
-      mountpoint: /data/www-proxy/certs
   proxy-vhosts:
-    driver: local-persist
-    driver_opts:
-      mountpoint: /data/www-proxy/vhosts
   proxy-html:
-    driver: local-persist
-    driver_opts:
-      mountpoint: /data/www-proxy/html
-  sparkcc-wiki-data:
-    driver: local-persist
-    driver_opts:
-      mountpoint: /data/sparkcc-wiki/data
-  sparkcc-wiki-repo:
-    driver: local-persist
-    driver_opts:
-      mountpoint: /data/sparkcc-wiki/repo
-  sparkcc-wiki-db-data:
-    driver: local-persist
-    driver_opts:
-      mountpoint: /data/sparkcc-wiki-db/data
+  proxy-dhparam:
+  proxy-conf:
+  #sparkcc-wiki-data:
+  #sparkcc-wiki-repo:
+  #sparkcc-wiki-db-data:
