@@ -24,7 +24,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - proxy-certs:/etc/nginx/certs:rw
-      - acme:/etc/acme.sh
+      - proxy-acme:/etc/acme.sh
   watchtower:
     image: v2tec/watchtower
     container_name: watchtower
@@ -79,6 +79,7 @@ volumes:
   proxy-html:
   proxy-dhparam:
   proxy-conf:
+  proxy-acme:
   #sparkcc-wiki-data:
   #sparkcc-wiki-repo:
   #sparkcc-wiki-db-data:
