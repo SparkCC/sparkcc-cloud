@@ -61,52 +61,6 @@ services:
       - sparkcc-wiki-data:/data
       - sparkcc-wiki-repo:/repo
       - /data/sparkcc-wiki/config/config.yml:/var/wiki/config.yml
-  sparkcc-hq-db:
-    image: mysql:8
-    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci','--default-authentication-plugin=mysql_native_password']
-    container_name: sparkcc-hq-db
-    restart: unless-stopped
-    volumes:
-      - sparkcc-hq-db-data:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=${HQ_MYSQL_ROOT_PASSWORD}
-      - MYSQL_PASSWORD=${HQ_MYSQL_SPARKCC_PASSWORD}
-      - MYSQL_DATABASE=sparkcc
-      - MYSQL_USER=sparkcc
-  sparkcc-hq-db-admin:
-    image: phpmyadmin/phpmyadmin
-    container_name: sparkcc-hq-db-admin
-    restart: unless-stopped
-    links:
-      - sparkcc-hq-db:db
-    environment:
-      - MYSQL_ROOT_PASSWORD=${HQ_MYSQL_ROOT_PASSWORD}
-      - VIRTUAL_HOST=hqdb.sparkcc.org
-      - LETSENCRYPT_HOST=hqdb.sparkcc.org
-      - LETSENCRYPT_EMAIL=admin@sparkcc.org
-    ports:
-      - '8004:80'
-  sparkcc-hq:
-    image: amorphic/sparkcc-hq:latest
-    container_name: sparkcc-hq
-    restart: unless-stopped
-    volumes:
-      - sparkcc-hq-uploads:/uploads
-    links:
-      - sparkcc-hq-db
-    depends_on:
-      - sparkcc-hq-db
-    ports:
-      - '8002:80'
-    environment:
-      - MYSQL_PASSWORD=${HQ_MYSQL_SPARKCC_PASSWORD}
-      - MYSQL_DATABASE=sparkcc
-      - MYSQL_USER=sparkcc
-      - MYSQL_HOST=sparkcc-hq-db
-      - SPARK_BASE_URL=https://hq.sparkcc.org/
-      - VIRTUAL_HOST=hq.sparkcc.org
-      - LETSENCRYPT_HOST=hq.sparkcc.org
-      - LETSENCRYPT_EMAIL=admin@sparkcc.org
   sparkcc-www:
     image: amorphic/sparkcc-web:latest
     container_name: sparkcc-www
@@ -143,11 +97,3 @@ volumes:
     driver: local-persist
     driver_opts:
       mountpoint: /data/sparkcc-wiki-db/data
-  sparkcc-hq-db-data:
-    driver: local-persist
-    driver_opts:
-      mountpoint: /data/sparkcc-hq-db/data
-  sparkcc-hq-uploads:
-    driver: local-persist
-    driver_opts:
-      mountpoint: /data/sparkcc-hq/uploads
