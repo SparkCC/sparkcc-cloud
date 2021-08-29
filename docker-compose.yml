@@ -37,7 +37,7 @@ services:
     container_name: membermatters
     restart: unless-stopped
     ports:
-      - '8004:80'
+      - '8004:8000'
     volumes:
       - 'membermatters:/usr/src/data'
     environment:
