@@ -32,6 +32,20 @@ services:
     command: --interval 30 --label-enable
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  membermatters:
+    image: membermatters/membermatters:latest
+    container_name: membermatters
+    restart: unless-stopped
+    ports:
+      - '8004:80'
+    volumes:
+      - 'membermatters:/usr/src/data'
+    environment:
+      - PORTAL_DOMAIN=https://members.sparkcc.org
+      - PORTAL_ENV=Production
+      - VIRTUAL_HOST=members.sparkcc.org
+      - LETSENCRYPT_HOST=members.sparkcc.org
+      - LETSENCRYPT_EMAIL=admin@sparkcc.org
 #  sparkcc-wiki-db:
 #    image: mongo
 #    container_name: sparkcc-wiki-db
@@ -80,6 +94,7 @@ volumes:
   proxy-dhparam:
   proxy-conf:
   proxy-acme:
+  membermatters:
   #sparkcc-wiki-data:
   #sparkcc-wiki-repo:
   #sparkcc-wiki-db-data:
