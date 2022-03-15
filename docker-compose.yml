@@ -86,6 +86,16 @@ services:
       - VIRTUAL_HOST=www.sparkcc.org,sparkcc.org
       - LETSENCRYPT_HOST=www.sparkcc.org,sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
+  sparkcc-www1:
+    image: microweber:microweber:v1.2.11
+    container-name: sparkcc-www1
+    restart: unless-stopped
+    ports:
+      - "8004:80"
+    environment:
+      - VIRTUAL_HOST=www1.sparkcc.org
+      - LETSENCRYPT_HOST=www1.sparkcc.org
+      - LETSENCRYPT_EMAIL=admin@sparkcc.org
 
 volumes:
   proxy-certs:
