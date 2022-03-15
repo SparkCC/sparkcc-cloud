@@ -88,7 +88,7 @@ services:
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
   sparkcc-www1:
     image: microweber:microweber:v1.2.11
-    container-name: sparkcc-www1
+    container_name: sparkcc-www1
     restart: unless-stopped
     ports:
       - "8004:80"
