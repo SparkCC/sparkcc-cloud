@@ -46,36 +46,6 @@ services:
       - VIRTUAL_HOST=members.sparkcc.org
       - LETSENCRYPT_HOST=members.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
-#  sparkcc-wiki-db:
-#    image: mongo
-#    container_name: sparkcc-wiki-db
-#    restart: unless-stopped
-#    ports:
-#      - '27017:27017'
-#    command: '--smallfiles --logpath=/dev/null'
-#    environment:
-#      - 'MONGO_LOG_DIR=/dev/null'
-#    volumes:
-#      - sparkcc-wiki-db-data:/data/db
-#  sparkcc-wiki:
-#    image: 'requarks/wiki:latest'
-#    container_name: sparkcc-wiki
-#    restart: unless-stopped
-#    links:
-#      - sparkcc-wiki-db
-#    depends_on:
-#      - sparkcc-wiki-db
-#    ports:
-#      - '8001:3000'
-#    environment:
-#      - WIKI_ADMIN_EMAIL=admin@sparkcc.org
-#      - VIRTUAL_HOST=wiki.sparkcc.org
-#      - LETSENCRYPT_HOST=wiki.sparkcc.org
-#      - LETSENCRYPT_EMAIL=admin@sparkcc.org
-#    volumes:
-#      - sparkcc-wiki-data:/data
-#      - sparkcc-wiki-repo:/repo
-#      - /data/sparkcc-wiki/config/config.yml:/var/wiki/config.yml
   sparkcc-www:
     image: amorphic/sparkcc-web:latest
     container_name: sparkcc-www
@@ -96,6 +66,40 @@ services:
       - VIRTUAL_HOST=www1.sparkcc.org
       - LETSENCRYPT_HOST=www1.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
+    volumes:
+      - sparkcc-www:/var/www/html
+  sparkcc-wiki-db:
+    image: postgres:11-alpine
+    container_name: sparkcc-wiki-db
+    environment:
+      - POSTGRES_DB=wiki
+      - POSTGRES_PASSWORD=${WIKI_DB_PASSWORD}
+      - POSTGRES_USER=wiki
+    logging:
+      driver: "none"
+    restart: unless-stopped
+    volumes:
+      - sparkcc-wiki-db:/var/lib/postgresql/data
+  sparkcc-wiki:
+    image: ghcr.io/requarks/wiki:2
+    container_name: sparkcc-wiki
+    depends_on:
+      - sparkcc-wiki-db
+    restart: unless-stopped
+    ports:
+      - "8006:3000"
+    environment:
+      - DB_TYPE=postgres
+      - DB_HOST=sparkcc-wiki-db
+      - DB_PORT=5432
+      - DB_USER=wiki
+      - DB_PASS=${WIKI_DB_PASSWORD}
+      - DB_NAME=wiki
+      - WIKI_ADMIN_EMAIL=admin@sparkcc.org
+      - VIRTUAL_HOST=wiki1.sparkcc.org
+      - VIRTUAL_PORT=3000
+      - LETSENCRYPT_HOST=wiki1.sparkcc.org
+      - LETSENCRYPT_EMAIL=admin@sparkcc.org
 
 volumes:
   proxy-certs:
@@ -105,6 +109,5 @@ volumes:
   proxy-conf:
   proxy-acme:
   membermatters:
-  #sparkcc-wiki-data:
-  #sparkcc-wiki-repo:
-  #sparkcc-wiki-db-data:
+  sparkcc-www:
+  sparkcc-wiki-db:
