@@ -96,9 +96,9 @@ services:
       - DB_PASS=${WIKI_DB_PASSWORD}
       - DB_NAME=wiki
       - WIKI_ADMIN_EMAIL=admin@sparkcc.org
-      - VIRTUAL_HOST=wiki1.sparkcc.org
+      - VIRTUAL_HOST=wiki.sparkcc.org
       - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=wiki1.sparkcc.org
+      - LETSENCRYPT_HOST=wiki.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
 
 volumes:
