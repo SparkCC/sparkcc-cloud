@@ -47,24 +47,14 @@ services:
       - LETSENCRYPT_HOST=members.sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
   sparkcc-www:
-    image: amorphic/sparkcc-web:latest
+    image: microweber/microweber:v1.2.19
     container_name: sparkcc-www
-    restart: unless-stopped
-    ports:
-      - "8003:80"
-    environment:
-      - VIRTUAL_HOST=www.sparkcc.org,sparkcc.org
-      - LETSENCRYPT_HOST=www.sparkcc.org,sparkcc.org
-      - LETSENCRYPT_EMAIL=admin@sparkcc.org
-  sparkcc-www1:
-    image: microweber/microweber:v1.2.11
-    container_name: sparkcc-www1
     restart: unless-stopped
     ports:
       - "8005:80"
     environment:
-      - VIRTUAL_HOST=www1.sparkcc.org
-      - LETSENCRYPT_HOST=www1.sparkcc.org
+      - VIRTUAL_HOST=www.sparkcc.org,sparkcc.org
+      - LETSENCRYPT_HOST=www.sparkcc.org,sparkcc.org
       - LETSENCRYPT_EMAIL=admin@sparkcc.org
     volumes:
       - sparkcc-www:/var/www/html
