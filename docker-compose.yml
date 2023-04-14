@@ -71,7 +71,7 @@ services:
     volumes:
       - sparkcc-wiki-db:/var/lib/postgresql/data
   sparkcc-wiki:
-    image: ghcr.io/requarks/wiki:2
+    image: ghcr.io/requarks/wiki:2.5
     container_name: sparkcc-wiki
     depends_on:
       - sparkcc-wiki-db
