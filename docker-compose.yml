@@ -33,7 +33,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   membermatters:
-    image: membermatters/membermatters:latest
+    image: membermatters/membermatters:v3.3.0
     container_name: membermatters
     restart: unless-stopped
     ports:
